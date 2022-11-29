@@ -9,5 +9,11 @@
         bool Enabled { get; }
 
         List<IComponent> Children { get; }
+
+        void Enable();
+        void Disable();
+
+        void Initialize();
+        void Update();
     }
 }
