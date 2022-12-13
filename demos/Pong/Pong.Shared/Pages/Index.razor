@@ -1,5 +1,28 @@
 ﻿@page "/"
+@using Blazor.Extensions;
+@using Blazor.Extensions.Canvas.Canvas2D;
+
+@inject IJSRuntime JsRuntime
 
 <div id="canvasContainer">
-    <BECanvas></BECanvas>
+    <BECanvas @ref="_canvas"></BECanvas>
 </div>
+
+@code 
+{
+    private BECanvasComponent _canvas;
+    private Canvas2DContext _context;
+    private BlazorGameContext _gameContext;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        _context = await this._canvas.CreateCanvas2DAsync();
+        var canvasMeta = await JsRuntime.InvokeAsync<CanvasMeta>("initCanvas", DotNetObjectReference.Create(this));
+    }
+
+    public class CanvasMeta
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+    }
+}
